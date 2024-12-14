@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Creator</title>
+    <link href="{{ url_for('static', filename='styles/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <h1>Создать крутяк <img style="width: 30px" src="static/gifs/doge-cool.gif">  из картинки</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required><br>
+        <label>Скорость (мс/кадр):</label>
+        <input type="number" name="speed" value="50" min="10" max="500"><br>
+        <label>Количество кадров:</label>
+        <input type="number" name="frames" value="36" min="12" max="72"><br>
+        <button type="submit">Создать GIF</button>
+    </form>
+
+    {% if gif_path %}
+    <h2>Ваш GIF: <a class="download-link" href="{{ gif_path }}" download>Скачать</a> </h2>
+    <img src="{{ gif_path }}" alt="Результат GIF">
+
+    {% endif %}
+</body>
+</html>

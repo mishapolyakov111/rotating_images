@@ -1,0 +1,7 @@
+﻿.venv
+.idea
+static/gifs/*
+static/images/*
+
+
+

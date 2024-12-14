@@ -1,0 +1,120 @@
+﻿/* Общий стиль для страницы */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Заголовок */
+h1 {
+    font-size: 2.5em;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 img {
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+/* Форма */
+form {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+form label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+}
+
+form input[type="file"],
+form input[type="number"],
+form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+form input[type="file"]:hover,
+form input[type="number"]:hover {
+    border-color: #84fab0;
+}
+
+form input[type="number"]:focus,
+form input[type="file"]:focus {
+    border-color: #84fab0;
+    box-shadow: 0 0 5px rgba(132, 250, 176, 0.5);
+}
+
+form button {
+    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+    color: #ffffff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+form button:hover {
+    background: linear-gradient(120deg, #8fd3f4, #84fab0);
+    transform: translateY(-2px);
+}
+
+/* Результат GIF */
+h2 {
+    font-size: 1.8em;
+    color: #ffffff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    margin-top: 30px;
+}
+
+img {
+    margin-top: 20px;
+    border: 5px solid #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 60%;
+    height: auto;
+}
+
+/* Ссылка на скачивание */
+.download-link {
+    font-size: 1em;
+    color: #ffffff;
+    text-decoration: none;
+    background: linear-gradient(120deg, #8fd3f4, #84fab0);
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.3s;
+}
+
+.download-link:hover {
+    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+    transform: scale(1.05);
+}

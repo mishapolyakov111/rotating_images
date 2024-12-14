@@ -1,0 +1,92 @@
+﻿import os
+import imghdr
+import numpy as np
+from flask import Flask, request, render_template, send_from_directory, flash
+from PIL import Image, UnidentifiedImageError
+from tqdm import tqdm
+
+app = Flask(__name__)
+app.config['GIF_FOLDER'] = "static\\gifs"
+app.config['IMAGES_FOLDER'] = "static\\images"
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Ограничение: 10 MB
+app.secret_key = "supersecretkey"  # Для flash-сообщений
+
+
+def is_image(file_path):
+    """Проверяет, является ли файл изображением"""
+    valid_image_formats = {"jpeg", "png", "gif", "bmp", "tiff"}
+    file_type = imghdr.what(file_path)
+    return file_type in valid_image_formats
+
+
+def create_rotating_frames(img, num_frames):
+    diagonal = int(np.ceil((img.width**2 + img.height**2) ** 0.5))
+    canvas_size = (diagonal, diagonal)
+
+    frames = []
+    for angle in tqdm(np.linspace(0, 360, num_frames, endpoint=False)):
+        rotated_frame = img.rotate(-angle, resample=Image.BICUBIC, expand=True)
+
+        canvas = Image.new("RGBA", canvas_size, (255, 255, 255, 0))
+        offset = ((canvas_size[0] - rotated_frame.width) // 2, (canvas_size[1] - rotated_frame.height) // 2)
+        canvas.paste(rotated_frame, offset, rotated_frame)
+
+        final_frame = Image.new("RGB", canvas.size, (255, 255, 255))
+        final_frame.paste(canvas, mask=canvas.split()[3])
+
+        frames.append(final_frame.convert("P", dither=Image.NONE))
+    return frames
+
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        file = request.files.get("image")
+        speed = int(request.form.get("speed", 50))  # Скорость кадра в миллисекундах
+        num_frames = int(request.form.get("frames", 36))  # Количество кадров
+
+        if file:
+            filepath = os.path.join(app.config['IMAGES_FOLDER'], file.filename)
+            file.save(filepath)
+
+            # Проверка: является ли файл изображением
+            if not is_image(filepath):
+                os.remove(filepath)  # Удаляем невалидный файл
+                flash("Файл не является изображением. Пожалуйста, загрузите допустимый файл.", "error")
+                return render_template("index.html")
+
+            # Дополнительная проверка через Pillow (на случай некорректных файлов)
+            try:
+                img = Image.open(filepath).convert("RGBA")
+            except UnidentifiedImageError:
+                os.remove(filepath)  # Удаляем файл, если он невалидный
+                flash("Не удалось обработать изображение. Загрузите допустимый файл.", "error")
+                return render_template("index.html")
+
+            # Создание GIF
+            frames = create_rotating_frames(img, num_frames)
+
+            filename_without_ext = os.path.splitext(file.filename)[0]
+            gif_path = os.path.join(app.config['GIF_FOLDER'], f"rotating_{filename_without_ext}.gif")
+            frames[0].save(
+                gif_path,
+                save_all=True,
+                append_images=frames[1:],
+                duration=speed,
+                loop=0,
+                disposal=2,
+            )
+            return render_template("index.html", gif_path=f"static/gifs/rotating_{filename_without_ext}.gif")
+
+    return render_template("index.html")
+
+
+@app.route("/static/gifs/<path:filename>")
+def gifs(filename):
+    return send_from_directory("static/gifs", filename)
+
+
+if __name__ == "__main__":
+    os.makedirs(app.config['IMAGES_FOLDER'], exist_ok=True)
+    os.makedirs(app.config['GIF_FOLDER'], exist_ok=True)
+    app.run(debug=True)
