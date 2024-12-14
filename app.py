@@ -4,6 +4,7 @@ import numpy as np
 from flask import Flask, request, render_template, send_from_directory, flash
 from PIL import Image, UnidentifiedImageError
 from tqdm import tqdm
+import logging
 
 app = Flask(__name__)
 app.config['GIF_FOLDER'] = "static\\gifs"
@@ -83,7 +84,13 @@ def index():
 
 @app.route("/static/gifs/<path:filename>")
 def gifs(filename):
-    return send_from_directory("static/gifs", filename)
+    try:
+        file_path = os.path.join(app.root_path, 'static/gifs', filename)
+        logging.info(f"Trying to serve file: {file_path}")
+        return send_from_directory(os.path.join(app.root_path, 'static/gifs'), filename)
+    except Exception as e:
+        logging.error(f"Error serving file: {str(e)}")
+        return "Error serving file", 500
 
 
 if __name__ == "__main__":
