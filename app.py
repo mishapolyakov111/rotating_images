@@ -89,4 +89,8 @@ def gifs(filename):
 if __name__ == "__main__":
     os.makedirs(app.config['IMAGES_FOLDER'], exist_ok=True)
     os.makedirs(app.config['GIF_FOLDER'], exist_ok=True)
-    app.run(debug=True)
+
+    if os.getenv("FLASK_ENV") == "production":
+        app.run(debug=False)
+    else:
+        app.run(debug=True)
