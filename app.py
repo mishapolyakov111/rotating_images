@@ -90,7 +90,8 @@ if __name__ == "__main__":
     os.makedirs(app.config['IMAGES_FOLDER'], exist_ok=True)
     os.makedirs(app.config['GIF_FOLDER'], exist_ok=True)
 
+    port = int(os.environ.get("PORT", 5000))
     if os.getenv("FLASK_ENV") == "production":
-        app.run(debug=False)
+        app.run(debug=False, port=port)
     else:
-        app.run(debug=True)
+        app.run(debug=True, port=port)
