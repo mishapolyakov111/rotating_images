@@ -82,6 +82,11 @@ def index():
                 loop=0,
                 disposal=2,
             )
+            if os.path.exists(gif_path):
+                print(f"Файл {gif_path} успешно сохранён.")
+            else:
+                print(f"Ошибка: файл {gif_path} не был сохранён.")
+
             return render_template("index.html", gif_path=f"static/gifs/rotating_{filename_without_ext}.gif")
 
     return render_template("index.html")
