@@ -51,9 +51,9 @@ def index():
             file.save(filepath)
 
             if os.path.exists(filepath):
-                logging.info(f"Файл {filepath} успешно сохранён.")
+                print(f"Файл {filepath} успешно сохранён.")
             else:
-                logging.error(f"Ошибка: файл {filepath} не был сохранён.")
+                print(f"Ошибка: файл {filepath} не был сохранён.")
 
             # Проверка: является ли файл изображением
             if not is_image(filepath):
