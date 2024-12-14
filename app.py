@@ -7,8 +7,8 @@ from tqdm import tqdm
 import logging
 
 app = Flask(__name__)
-app.config['GIF_FOLDER'] = "static\\gifs"
-app.config['IMAGES_FOLDER'] = "static\\images"
+app.config['GIF_FOLDER'] = "static/gifs"
+app.config['IMAGES_FOLDER'] = "static/images"
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Ограничение: 10 MB
 app.secret_key = "supersecretkey"  # Для flash-сообщений
 
