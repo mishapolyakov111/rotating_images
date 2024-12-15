@@ -3,6 +3,7 @@ import imghdr
 import numpy as np
 from flask import Flask, request, render_template, send_from_directory, flash
 from PIL import Image, UnidentifiedImageError
+from scipy.optimize import direct
 from tqdm import tqdm
 import logging
 
@@ -20,13 +21,13 @@ def is_image(file_path):
     return file_type in valid_image_formats
 
 
-def create_rotating_frames(img, num_frames):
+def create_rotating_frames(img, num_frames, direction):
     diagonal = int(np.ceil((img.width**2 + img.height**2) ** 0.5))
     canvas_size = (diagonal, diagonal)
 
     frames = []
     for angle in tqdm(np.linspace(0, 360, num_frames, endpoint=False)):
-        rotated_frame = img.rotate(-angle, resample=Image.BICUBIC, expand=True)
+        rotated_frame = img.rotate(direction * angle, resample=Image.BICUBIC, expand=True)
 
         canvas = Image.new("RGBA", canvas_size, (255, 255, 255, 0))
         offset = ((canvas_size[0] - rotated_frame.width) // 2, (canvas_size[1] - rotated_frame.height) // 2)
@@ -45,6 +46,7 @@ def index():
         file = request.files.get("image")
         speed = int(request.form.get("speed", 50))  # Скорость кадра в миллисекундах
         num_frames = int(request.form.get("frames", 36))  # Количество кадров
+        direction = -1 if request.form.get("direction", "clockwise") == "clockwise" else 1
 
         if file:
             filepath = os.path.join(app.config['IMAGES_FOLDER'], file.filename)
@@ -70,7 +72,7 @@ def index():
                 return render_template("index.html")
 
             # Создание GIF
-            frames = create_rotating_frames(img, num_frames)
+            frames = create_rotating_frames(img, num_frames, direction)
 
             filename_without_ext = os.path.splitext(file.filename)[0]
             gif_path = os.path.join(app.config['GIF_FOLDER'], f"rotating_{filename_without_ext}.gif")
