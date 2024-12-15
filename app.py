@@ -3,7 +3,6 @@ import imghdr
 import numpy as np
 from flask import Flask, request, render_template, send_from_directory, flash
 from PIL import Image, UnidentifiedImageError
-from scipy.optimize import direct
 from tqdm import tqdm
 import logging
 
