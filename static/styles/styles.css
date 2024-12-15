@@ -34,6 +34,7 @@ form {
     padding: 20px 30px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     max-width: 400px;
+    display: block
     width: 60%;
 }
 
@@ -46,7 +47,6 @@ form label {
 
 form input[type="number"],
 form button {
-    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -55,6 +55,11 @@ form button {
     outline: none;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
+
+form button {
+    width: 100%;
+}
+
 
 form input[type="number"]:hover {
     border-color: #84fab0;
@@ -66,7 +71,6 @@ form input[type="number"]:focus {
 }
 
 form input[type="file"] {
-    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
